@@ -29,9 +29,10 @@ public class ProfilesController : BaseApiController
 
     [HttpPut("{photoId}/setMain")]
     public async Task<ActionResult> SetMainPhoto(string photoId)
-    {
+    {    
         return HandleResult(await Mediator.Send(new SetMainPhoto.Command { PhotoId = photoId }));
     }
+
     [HttpGet("{userId}")]
     public async Task<ActionResult<UserProfile>> GetProfile(string userId)
     {
