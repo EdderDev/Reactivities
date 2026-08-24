@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import agent from "../api/agent"
 import { useMemo } from "react";
+import type { EditProfileSchema } from "../schemas/editProfileSchema";
 
 export const useProfile = (userId?: string) => {
 
@@ -130,6 +131,7 @@ export const useProfile = (userId?: string) => {
     })
 
     const deletePhoto = useMutation({
+
         mutationFn: async (photoId: string) => {
             await agent.delete(`/profiles/${photoId}/photos`)
         },
@@ -137,6 +139,36 @@ export const useProfile = (userId?: string) => {
             queryClient.setQueryData(["photos", userId], (photos: Photo[]) => {
                 return photos?.filter(x => x.id !== photoId)
             })
+        }
+    })
+
+    const editProfile = useMutation({
+        mutationFn: async (profile: EditProfileSchema) => {
+            await agent.put(`/profiles/editProfile`, profile)
+        },
+        onSuccess: (_, profile) => {
+
+            queryClient.setQueryData(["profile", userId], (data: Profile) => {
+
+                if (!data)
+                    return data;
+
+                return {
+                    ...data,
+                    displayName: profile.displayName,
+                    bio: profile.bio
+                }
+            })
+            queryClient.setQueryData(["user"], (userData: User) => {
+
+                if (!userData)
+                    return userData;
+
+                return {
+                    ...userData,
+                    displayName: profile.displayName
+                }
+            });
         }
     })
 
@@ -152,7 +184,8 @@ export const useProfile = (userId?: string) => {
         isCurrentUser,
         uploadPhoto,
         setMainPhoto,
-        deletePhoto
+        deletePhoto,
+        editProfile
     }
 }
 
