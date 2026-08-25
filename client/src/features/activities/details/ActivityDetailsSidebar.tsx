@@ -1,11 +1,13 @@
 import { Paper, Typography, List, ListItem, Chip, ListItemAvatar, Avatar, ListItemText, Grid } from "@mui/material";
+import { Link } from "react-router";
 
 type Props = {
     activity: Activity
 }
 
 export default function ActivityDetailsSidebar({ activity }: Props) {
-    const following = true;
+
+
 
     return (
         <>
@@ -25,7 +27,7 @@ export default function ActivityDetailsSidebar({ activity }: Props) {
             <Paper sx={{ padding: 2 }}>
 
                 {activity.attendees.map(attendee => (
-                    <Grid key={attendee.id} container sx={{ alignItems: "center" }}>
+                    <Grid key={attendee.id} container sx={{ alignItems: "center" }} >
                         <Grid size={8}>
                             <List sx={{ display: 'flex', flexDirection: 'column' }}>
                                 <ListItem>
@@ -39,9 +41,9 @@ export default function ActivityDetailsSidebar({ activity }: Props) {
                                     </ListItemAvatar>
                                     <ListItemText>
                                         <Typography variant="h6">
-                                            {attendee.displayName}
+                                            <Link to={`/profiles/${attendee.id}`}>{attendee.displayName}</Link>
                                         </Typography>
-                                        {following && (
+                                        {attendee.following && (
                                             <Typography variant="body2" sx={{ color: "orange" }}>
                                                 Following
                                             </Typography>
