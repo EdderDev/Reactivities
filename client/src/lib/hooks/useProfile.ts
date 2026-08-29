@@ -1,10 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import agent from "../api/agent"
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { EditProfileSchema } from "../schemas/editProfileSchema";
 
 export const useProfile = (userId?: string, predicate?: string) => {
 
+    const [filter, setFilter] = useState<string | null>(null);
     const queryClient = useQueryClient()
 
     const { data: profile, isLoading: loadingProfile } = useQuery<Profile>({
@@ -25,13 +26,26 @@ export const useProfile = (userId?: string, predicate?: string) => {
         enabled: !!userId && !predicate
     })
 
-    const {data: followings, isLoading: loadingFollowings} = useQuery<Profile[]>({
+    const { data: followings, isLoading: loadingFollowings } = useQuery<Profile[]>({
         queryKey: ["followings", userId, predicate],
         queryFn: async () => {
             const response = await agent.get<Profile[]>(`/profiles/${userId}/follow-list?predicate=${predicate}`);
             return response.data;
         },
         enabled: !!userId && !!predicate
+    })
+
+    const { data: userActivities, isLoading: loadingUserActivities } = useQuery({
+        queryKey: ["user-activities", filter],
+        queryFn: async () => {
+            const response = await agent.get<Activity[]>(`/profiles/${userId}/activities`, {
+                params: {
+                    filter
+                }
+            });
+            return response.data;
+        },
+        enabled: !!userId && !!filter
     })
 
     const uploadPhoto = useMutation({
@@ -187,8 +201,8 @@ export const useProfile = (userId?: string, predicate?: string) => {
         },
         onSuccess: () => {
             queryClient.setQueryData(["profile", userId], (profile: Profile) => {
-                queryClient.invalidateQueries({queryKey: ["followings", userId, "followers"]})
-                if(!profile || profile.followersCount === undefined)
+                queryClient.invalidateQueries({ queryKey: ["followings", userId, "followers"] })
+                if (!profile || profile.followersCount === undefined)
                     return profile;
 
                 return {
@@ -216,7 +230,11 @@ export const useProfile = (userId?: string, predicate?: string) => {
         editProfile,
         updateFollowing,
         followings,
-        loadingFollowings
+        loadingFollowings,
+        userActivities,
+        loadingUserActivities,
+        setFilter,
+        filter
     }
 }
 

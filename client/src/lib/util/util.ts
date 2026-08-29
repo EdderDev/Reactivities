@@ -4,7 +4,6 @@ import z from "zod";
 export function formatDate(date: DateArg<Date>) {
     return format(date, "dd MMM yyyy HH:mm")
 }
-
 export function timeAgo(date: DateArg<Date>){
     return formatDistanceToNow(date) + " ago"
 }

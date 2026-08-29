@@ -26,8 +26,10 @@ export default function ActivityCard({ activity }: Props) {
                     title={activity.title}
                     slotProps={{
                         title: {
-                            fontWeight: 'bold',
-                            fontSize: 20
+                            sx: {
+                                fontWeight: 'bold',
+                                fontSize: 20
+                            }
                         }
                     }}
                     subheader={
