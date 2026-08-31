@@ -118,7 +118,7 @@ export const useProfile = (userId?: string, predicate?: string) => {
 
             return { prevUser, prevProfile };
         },
-        onError: (error, photo, context) => {
+        onError: (error, _, context) => {
             console.log(error);
             if (context?.prevUser) {
                 queryClient.setQueryData(["user"], context.prevUser)

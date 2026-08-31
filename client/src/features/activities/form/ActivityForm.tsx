@@ -10,7 +10,6 @@ import SelectInput from "../../../app/shared/components/SelectInput";
 import { categoryOptions } from "./categoryOptions";
 import DateTimeInput from "../../../app/shared/components/DateTimeInput";
 import LocationInput from "../../../app/shared/components/LocationInput";
-import type { Activity } from "../../../lib/types";
 
 
 export default function ActivityForm() {
@@ -82,7 +81,7 @@ export default function ActivityForm() {
                 <LocationInput control={control} label="Enter the location" name="location" />
 
                 <Box sx={{ display: "flex", justifyContent: "end", gap: 3 }}>
-                    <Button color="inherit">Cancel</Button>
+                    <Button onClick={() => navigate(-1)} color="inherit">Cancel</Button>
                     <Button
                         type="submit"
                         color="success"

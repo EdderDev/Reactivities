@@ -55,7 +55,7 @@ export default function ProfileActivities() {
                 sx={{ marginTop: 2, height: 400, overflow: 'auto' }}
             >
                 {userActivities && userActivities.map((activity: Activity) => (
-                    <Grid size={2} key={activity.id}>
+                    <Grid size={2} key={activity.id} sx={{ containerType: 'inline-size' }}>
                         <Link to={`/activities/${activity.id}`}
                             style={{ textDecoration: 'none' }}>
                             <Card elevation={4}>
@@ -67,7 +67,15 @@ export default function ProfileActivities() {
                                     sx={{ objectFit: 'cover' }}
                                 />
                                 <CardContent>
-                                    <Typography variant="h6" sx={{ mb: 1, textAlign: "center" }}>
+                                    <Typography
+                                        variant="h6"
+                                        sx={{
+                                            mb: 1,
+                                            textAlign: "center",
+                                            whiteSpace: "nowrap",
+                                            fontSize: "clamp(1rem, 11cqw, 1.25rem)"
+                                        }}
+                                    >
                                         {activity.title}
                                     </Typography>
                                     <Typography

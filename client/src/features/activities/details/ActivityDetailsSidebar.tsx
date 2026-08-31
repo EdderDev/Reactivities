@@ -30,7 +30,7 @@ export default function ActivityDetailsSidebar({ activity }: Props) {
                     <Grid key={attendee.id} container sx={{ alignItems: "center" }} >
                         <Grid size={8}>
                             <List sx={{ display: 'flex', flexDirection: 'column' }}>
-                                <ListItem>
+                                <ListItem component={Link} to={`/profiles/${attendee.id}`}>
                                     <ListItemAvatar>
                                         <Avatar
                                             variant="rounded"
@@ -41,7 +41,7 @@ export default function ActivityDetailsSidebar({ activity }: Props) {
                                     </ListItemAvatar>
                                     <ListItemText>
                                         <Typography variant="h6">
-                                            <Link to={`/profiles/${attendee.id}`}>{attendee.displayName}</Link>
+                                            {attendee.displayName}
                                         </Typography>
                                         {attendee.following && (
                                             <Typography variant="body2" sx={{ color: "orange" }}>
