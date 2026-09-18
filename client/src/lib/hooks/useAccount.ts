@@ -24,7 +24,7 @@ export const useAccount = () => {
         mutationFn: async (creds: LoginSchema) => {
             await agent.post("/login?useCookies=true", creds);
         },
-        onSuccess: async  () => {
+        onSuccess: async () => {
             await queryClient.invalidateQueries({
                 queryKey: ["user"]
             });
@@ -50,13 +50,13 @@ export const useAccount = () => {
     });
 
     const verifyEmail = useMutation({
-        mutationFn: async({userId, code}: {userId: string, code: string}) => {
+        mutationFn: async ({ userId, code }: { userId: string, code: string }) => {
             await agent.get(`/confirmEmail?userId=${userId}&code=${code}`)
         }
     })
 
     const resendConfirmationEmail = useMutation({
-        mutationFn: async ({email, userId} :{email?: string, userId?: string | null}) => {
+        mutationFn: async ({ email, userId }: { email?: string, userId?: string | null }) => {
             await agent.get(`/account/resendConfirmEmail`, {
                 params: {
                     email,
@@ -77,13 +77,25 @@ export const useAccount = () => {
 
     const forgotPassword = useMutation({
         mutationFn: async (email: string) => {
-            await agent.post("/forgotPassword", {email})
+            await agent.post("/forgotPassword", { email })
         }
     })
 
     const resetPassword = useMutation({
         mutationFn: async (data: ResetPassword) => {
             await agent.post("/resetPassword", data);
+        }
+    })
+
+    const fetchGithubToken = useMutation({
+        mutationFn: async (code: string) => {
+            const response = await agent.post(`/account/github-login?code=${code}`);
+            return response.data;
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: ["user"]
+            })
         }
     })
 
@@ -100,7 +112,8 @@ export const useAccount = () => {
         resendConfirmationEmail,
         changePassword,
         forgotPassword,
-        resetPassword
+        resetPassword,
+        fetchGithubToken
     }
 }
 
